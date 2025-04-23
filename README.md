@@ -1,3 +1,5 @@
+// TODO: refactor
+
 # Microsoft 365 MCP Server
 
 ## 💡 Description

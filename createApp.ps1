@@ -1,3 +1,4 @@
+# TODO: most probably after I am done we should remove this 
 # The aim of this script is to create an app registration that 
 # we will use to sign in as an app using cert and password
 # and for now will allow to manage SharePoint stuff 
