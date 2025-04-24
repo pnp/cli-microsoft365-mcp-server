@@ -5,6 +5,10 @@
 Currently this is a work in progress and more POC than a solution. 
 The goal is to create a MCP server that will allow to run any kind of CLI for Microsoft 365 command.
 
+<a href="https://glama.ai/mcp/servers/@pnp/cli-microsoft365-mcp-server">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@pnp/cli-microsoft365-mcp-server/badge" alt="Microsoft 365 Server MCP server" />
+</a>
+
 ## 📦 Prerequisites
 
 - Node.js 20.x or higher
@@ -94,4 +98,3 @@ Click on start and you should see 4 new tools added to your GitHub Copilot Agent
 - [MCP inspector](https://github.com/modelcontextprotocol/inspector)
 - [Use MCP servers in VS Code (Preview)](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
 - [Use CLI for Microsoft 365 programmatically](https://pnp.github.io/cli-microsoft365/user-guide/use-cli-api)
-
