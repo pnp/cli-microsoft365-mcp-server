@@ -1,11 +1,8 @@
-// TODO: refactor
-
-# Microsoft 365 MCP Server
+# CLI for Microsoft 365 MCP Server
 
 ## 💡 Description
 
 Currently this is a work in progress and more POC than a solution. 
-The goal is to create a MCP server that will allow to run any kind of CLI for Microsoft 365 command.
 
 ## 📦 Prerequisites
 
@@ -21,21 +18,23 @@ Then in order to build the project run:
 npm run build
 ```
 
-In order to test this tool you will need to create a Entra app req and a certificate so that this MCP server can authenticate against Microsoft 365 as an app. In order to create a certificate and the app req with needed scopes and added it to your tenant along with the certificate runt the `createApp.ps1` script and follow along the instructions. Most of the things you may leave empty when creating the cert except the password. The password is needed. As the script uses [CLI for Microsoft 365](https://pnp.github.io/cli-microsoft365) to create the app req and other stuff you will first need to install CLI for Microsoft 365 globally using `npm i -g @pnp/cli-microsoft365` and sign in to your tenant as admin. After you executed the script you should see a 'MCP Server Test' app reg on your Entra ID with the needed scopes and certificate. You should also see the certificate file and the exported base64 encoded certificate in the `temp` folder. YOu will need them later.
+This MCP server uses the globally installed [CLI for Microsoft 365](https://pnp.github.io/cli-microsoft365) that you need to install globally using `npm i -g @pnp/cli-microsoft365`.
+
+The MCP server will not do any authentication for you. You will need to first authenticate using CLI for Microsoft 365 using the `m365 login` command. Once you are authenticated the MCP server will use the same authentication context when running any tool.
 
 ### Running MCP using the inspector
 
-One of the ways to test the M365 MCP server is using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector). 
-First start the M365 MCP server using the command:
+One of the ways to test the CLI for Microsoft 365 MCP server is using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector). 
+First start the MCP server using the command:
 
 ```
 npm run start
 ```
 
-Now in order to run the inspector for your MCP server also passing down the needed parameters as environment so that the MCP server may pick them up and use them to authenticate against Microsoft 365 you can run the following command:
+Now in order to run the inspector for your MCP server you need run the following command in the repo root folder location:
 
 ```
-npx @modelcontextprotocol/inspector -e CertificatePassword='YOUR_PASSOWRD' -e AppId='ENTRA_APP_REG_ID' -e TenantId='TENANT_ID' -e TenantUrl='TENANT_URL' -e CertificateBase64Encoded='BASE64_ENCODED_VALUE_OF_YOUR_CERT' node dist/index.js
+npx @modelcontextprotocol/inspector node dist/index.js
 ```
 
 After that wait for the inspector to start and open the inspector in your browser. You should see the MCP server running and you should be able to query the tools and execute them locally.
@@ -45,8 +44,7 @@ After that wait for the inspector to start and open the inspector in your browse
 ### Running MCP in VS Code
 
 It is also possible to run the MCP server in VS Code from your local build so that it may be used by GitHub Copilot Agent.
-As of now this is only supported in VS Code Insiders.
-First start the M365 MCP server using the command:
+First start the CLI for Microsoft 365 MCP server using the command:
 
 ```
 npm run start
@@ -68,26 +66,15 @@ Click enter and name it how ever you like. It is recommended to add it to `works
             "command": "node",
             "args": [
                 "FULL_PATH_TO_YOUR_PROJECT/dist/index.js" // e.g. C:/workspace/repo/microsoft-365-mcp-server/dist/index.js
-            ],
-            "env": {
-                "CertificateBase64Encoded": "BASE64_ENCODED_VALUE_OF_YOUR_CERT",
-                "CertificatePassword": "YOUR_PASSOWRD",
-                "AppId": "ENTRA_APP_REG_ID",
-                "TenantId": "TENANT_ID",
-                "TenantUrl": "TENANT_URL" // e.g. https://tenanttocheck.sharepoint.com/
-            }
+            ]
         }
     }
 }
 ```
 
-Click on start and you should see 4 new tools added to your GitHub Copilot Agent. Test them out.
+Click on start and you should see 358 new tools added to your GitHub Copilot Agent. Test them out. It is recommended to use `Claude 3.5 Sonnet` as the AI model for the best results.
 
 ![vs code](assets/mcp-vs-code.png)
-
-## 🎬 Demo
-
-👉 [Movie 🎬](https://1drv.ms/v/c/e82bbd5e6a08f219/ERGiLDUdw7VKi6Z01S_HTdkBPalukte7lJyiseIauFd2QA?e=gVezUZ)
 
 ## 🔗 Resources
 
