@@ -5,10 +5,10 @@ import { promises as fs } from 'fs';
 export async function runCliCommand(toolName: string, input: any): Promise<string> {
     return new Promise((resolve, reject) => {
         const command = `m365 ${toolName.replace(/-/g, ' ')}`;
-        const args = input ? Object.entries(input).map(([key, value]) => `--${key} \"${value}\"`).join(' ') : '';
-
-        console.error(`${command} ${args}`);
-        const subprocess = spawn(`${command} ${args}`, { shell: true });
+        const args = input ? Object.entries(input).filter(([key, value]) => value !== null).map(([key, value]) => `--${key} \"${value}\"`).join(' ') : '';
+        const commandToRun = `${command} ${args} --output "json"`;
+        console.error(commandToRun);
+        const subprocess = spawn(commandToRun, { shell: true });
 
         let output = '';
         let error = '';
@@ -50,11 +50,15 @@ export async function getAllCommands(): Promise<any[]> {
                     description: command.description,
                     inputSchema: {
                         type: "object",
-                        properties: {},
-                        required: [],
+                        properties: command.options.reduce((acc: any, option: any) => {
+                            if (!['query', 'verbose', 'debug', 'output'].includes(option.name)) {
+                                acc[option.name] = { type: "string" };
+                            }
+                            return acc;
+                        }, {}),
+                        required: command.options.filter((option: any) => option.required).map((option: any) => option.name),
                     }
                 }));
-            console.error(`Commands: ${JSON.stringify(commands)}`);
         }
     } catch (error) {
         console.error('An error occurred:', error);
