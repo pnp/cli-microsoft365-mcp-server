@@ -1,9 +1,33 @@
 {
-  "name": "microsoft-365-mcp-server",
-  "version": "0.0.1",
-  "description": "",
+  "name": "@pnp/cli-microsoft365-mcp-server",
+  "version": "0.1.1",
+  "description": "Model Context Protocol (MCP) server for CLI for Microsoft 365 that allows to use natural language to manage your Microsoft 365 tenant.",
+  "author": "Microsoft 365 & Power Platform Community",
+  "license": "MIT",
   "main": "dist/index.js",
   "type": "module",
+  "keywords": [
+    "Microsoft365",
+    "SharePointOnline",
+    "mcp",
+    "model-context-protocol",
+    "ai-assistant",
+    "cli-for-microsoft-365"
+  ],
+  "maintainers": [
+    {
+      "name": "Adam Wójcik",
+      "email": "adam.wojcik.it@gmail.com",
+      "web": "https://github.com/Adam-it"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pnp/cli-microsoft365-mcp-server.git"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js"
