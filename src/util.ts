@@ -65,7 +65,6 @@ export async function getAllCommands(): Promise<any[]> {
         const fileContent = await fs.readFile(filePath, 'utf-8');
         const cliCommands = JSON.parse(fileContent);
         commands = cliCommands
-            .filter((command: any) => command.name.startsWith('spo'))
             .map((command: any) => ({
                 name: command.name.replace(/\s+/g, '-'),
                 description: command.description,
