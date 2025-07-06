@@ -13,6 +13,8 @@ For best results, use it with Claude Sonnet 4 or Claude Sonnet 3.7.
 
 ## 🚀 Installation & Usage
 
+👉 Check out the [Getting Started recording 🎬](https://www.youtube.com/watch?v=p1PRLgN3Cqk)
+
 This MCP server uses the globally installed [CLI for Microsoft 365](https://pnp.github.io/cli-microsoft365) that you need to install globally using `npm i -g @pnp/cli-microsoft365`.
 
 After you install the CLI for Microsoft 365 perform the initial setup by running the:
