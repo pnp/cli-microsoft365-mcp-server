@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 
 export async function runCliCommand(command: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        const subprocess = spawn(command, { 
+        const subprocess = spawn(command, {
             shell: true,
             timeout: 120000,
         });
@@ -42,16 +42,20 @@ export async function runCliCommand(command: string): Promise<string> {
 export async function getCommandDocs(commandName: string, docs: string): Promise<any> {
     try {
         const filePath = await checkGlobalPackage('@pnp/cli-microsoft365', `docs\\docs\\cmd\\${docs}`);
-        if (!filePath)
+        if (!filePath) {
             throw new Error('@pnp/cli-microsoft365 npm package not found or command documentation file not found');
+        }
+
+        const fileExists = await CheckIfFileExists(filePath);
+        if (!fileExists) {
+            throw new Error(`Documentation file for command ${commandName} not found at ${filePath}`);
+        }
 
         const fileContent = await fs.readFile(filePath, 'utf-8');
         return fileContent;
     } catch (error) {
         console.error('An error occurred:', error);
-        return {
-            error: `Failed to retrieve documentation for command ${commandName}: ${error}`
-        };
+        return `Failed to retrieve documentation for command ${commandName}: ${error}`;
     }
 }
 
@@ -59,14 +63,14 @@ export async function getAllCommands(): Promise<any[]> {
     let commands: any[] = [];
     try {
         const filePath = await checkGlobalPackage('@pnp/cli-microsoft365', 'allCommandsFull.json');
-        if (!filePath) 
+        if (!filePath)
             throw new Error('@pnp/cli-microsoft365 npm package not found or allCommandsFull.json file not found');
 
         const fileContent = await fs.readFile(filePath, 'utf-8');
         const cliCommands = JSON.parse(fileContent);
         commands = cliCommands
             .map((command: any) => ({
-                name: command.name.replace(/\s+/g, '-'),
+                name: `m365 ${command.name}`,
                 description: command.description,
                 docs: command.help
             }));
@@ -79,18 +83,29 @@ export async function getAllCommands(): Promise<any[]> {
     return commands;
 }
 
+async function CheckIfFileExists(filePath: string): Promise<boolean> {
+    try {
+        await fs.access(filePath);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 async function checkGlobalPackage(packageName: string, filePath: string): Promise<string | null> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         exec('npm list -g --depth=0', (error, stdout, stderr) => {
             if (error) {
-                reject(error);
+                console.error('Error checking global packages:', error);
+                resolve(null);
                 return;
             }
 
             if (stdout.includes(packageName)) {
                 exec('npm root -g', (err, npmRoot) => {
                     if (err) {
-                        reject(err);
+                        console.error('Error getting npm root:', err);
+                        resolve(null);
                         return;
                     }
 
@@ -98,6 +113,7 @@ async function checkGlobalPackage(packageName: string, filePath: string): Promis
                     resolve(fileFullPath);
                 });
             } else {
+                console.log(`Package ${packageName} not found in global packages`);
                 resolve(null);
             }
         });
