@@ -41,7 +41,7 @@ export async function runCliCommand(command: string): Promise<string> {
 
 export async function getCommandDocs(commandName: string, docs: string): Promise<any> {
     try {
-        const filePath = await checkGlobalPackage('@pnp/cli-microsoft365', `docs\\docs\\cmd\\${docs}`);
+        const filePath = await checkGlobalPackage('@pnp/cli-microsoft365', `docs${path.sep}docs${path.sep}cmd${path.sep}${docs}`);
         if (!filePath) {
             throw new Error('@pnp/cli-microsoft365 npm package not found or command documentation file not found');
         }
