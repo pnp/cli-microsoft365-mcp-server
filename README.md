@@ -48,7 +48,7 @@ There are multiple ways to add the MCP server to VS Code. The most common way is
 3. Enter the command to run the MCP server, which is:
 
    ```
-   npx -y @pnp/cli-microsoft365-mcp-server
+   npx -y @pnp/cli-microsoft365-mcp-server@latest
    ```
 4. Name the server (e.g., `CLI for Microsoft 365 MCP Server`).
 
@@ -62,7 +62,7 @@ As a result, you should have the following configuration in your `.vscode/mcp.js
             "command": "npx",
             "args": [
                 "-y",
-                "@pnp/cli-microsoft365-mcp-server"
+                "@pnp/cli-microsoft365-mcp-server@latest"
           ]
         }
     }
@@ -76,6 +76,8 @@ For best results, use it with Claude Sonnet 4 or Claude Sonnet 3.7.
 ## 📷 Use Cases
 
 The below uses cases are only a few example how you may use this MCP server. It is capable of handling many different tasks, so feel free to experiment with it and basically manage all of Microsoft 365 using natural language.
+
+Also you may check the [CLI for Microsoft 365 wiki](https://github.com/pnp/cli-microsoft365-mcp-server/wiki) to find more [scenarios](https://github.com/pnp/cli-microsoft365-mcp-server/wiki/1.-Scenarios) how ClI for Microsoft 365 can be used to manage Microsoft 365.
 
 ### Manage SharePoint Online
 
