@@ -1,0 +1,33 @@
+name: 💡 Feature request
+description: Suggest an idea for this project.
+title: "💡 [Feature]: "
+labels: ["⭐ enhancement", "👀 needs peer review"]
+type: "Feature"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a new feature. You Rock! 🤩
+        
+        Please complete the below form to ensure we have the necessary details to get started.
+  - type: textarea
+    id: description
+    attributes:
+      label: 🎯 Aim of the feature
+      description: Provide a clear description explaining the idea.
+    validations:
+      required: true
+  - type: textarea
+    id: image
+    attributes:
+      label: 📷 Images (if possible) with expected result
+      description: If applicable, add screenshots or drawings to help explain your idea.
+    validations:
+      required: false
+  - type: textarea
+    id: more-info
+    attributes:
+      label: 🤔 Additional remarks or comments
+      description: Add any other context or information about the idea here.
+    validations:
+      required: false
