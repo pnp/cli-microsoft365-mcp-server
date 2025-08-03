@@ -8,6 +8,10 @@ This MCP server allows the use of natural language to execute any CLI for Micros
 
 For best results, use it with Claude Sonnet 4 or Claude Sonnet 3.7.
 
+<a href="https://glama.ai/mcp/servers/@pnp/cli-microsoft365-mcp-server">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@pnp/cli-microsoft365-mcp-server/badge" alt="Microsoft 365 Server MCP server" />
+</a>
+
 ## 📦 Prerequisites
 
 - Node.js 20.x or higher
@@ -190,4 +194,3 @@ After that, wait for the inspector to start and open the inspector in your brows
 - [typescript-sdk](https://github.com/modelcontextprotocol/typescript-sdk/tree/main)
 - [MCP servers](https://github.com/modelcontextprotocol/servers?tab=readme-ov-file)
 - [MCP inspector](https://github.com/modelcontextprotocol/inspector)
-
