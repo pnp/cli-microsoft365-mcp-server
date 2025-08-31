@@ -11,9 +11,13 @@ const server = new McpServer({
     version: "0.0.1",
 });
 
-server.tool('m365GetCommands', 'Gets all CLI for Microsoft 365 commands to be used by the Model Context Protocol to pick the right command for a given task',
-    {},
-    { title: 'Get all CLI for Microsoft 365 commands' },
+server.registerTool(
+    'm365_get_commands',
+    {
+        title: 'Retrieve CLI for Microsoft 365 commands',
+        description: 'Gets all CLI for Microsoft 365 commands to be used by the Model Context Protocol to pick the right command for a given task',
+        inputSchema: {}
+    },
     async ({ }) => {
         const commands = await util.getAllCommands();
         return {
@@ -25,22 +29,32 @@ server.tool('m365GetCommands', 'Gets all CLI for Microsoft 365 commands to be us
     }
 );
 
-server.tool('m365GetCommandDocs', 'Gets documentation for a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to provide detailed information about the command along with examples, use cases, and option descriptions',
+server.registerTool(
+    'm365_get_command_docs',
     {
-        commandName: z.string().describe('command name which for which documentation is requested'),
-        docs: z.string().describe('file path to command documentation')
+        title: 'Retrieve CLI for Microsoft 365 command docs',
+        description: 'Gets documentation for a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to provide detailed information about the command along with examples, use cases, and option descriptions',
+        inputSchema:
+        {
+            commandName: z.string().describe('command name which for which documentation is requested'),
+            docs: z.string().describe('file path to command documentation')
+        }
     },
-    { title: 'Get docs for specified CLI for Microsoft 365 command' },
     async ({ commandName, docs }) => ({
         content: [{ type: 'text', text: await util.getCommandDocs(commandName, docs) }]
     })
 );
 
-server.tool('m365RunCommand', 'Runs a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to execute the command and return the result and reason over the response',
+server.registerTool(
+    'm365_run_command',
     {
-        command: z.string().describe('command name which should be run')
+        title: 'Execute CLI for Microsoft 365 command',
+        description: 'Runs a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to execute the command and return the result and reason over the response',
+        inputSchema:
+        {
+            command: z.string().describe('command name which should be run')
+        }
     },
-    { title: 'Run specified CLI for Microsoft 365 command' },
     async ({ command }) => ({
         content: [{ type: 'text', text: await util.runCliCommand(command) }]
     })

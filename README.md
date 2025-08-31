@@ -1,5 +1,7 @@
 # CLI for Microsoft 365 MCP Server
 
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_CLI_for_Microsoft_365_MCP_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=ffffff)](https://insiders.vscode.dev/redirect/mcp/install?name=CLI%20for%20Microsoft%20365%20MCP%20Server&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40pnp%2Fcli-microsoft365-mcp-server%40latest%22%5D%7D) [![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install_CLI_for_Microsoft_365_MCP_Server-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=ffffff)](https://insiders.vscode.dev/redirect/mcp/install?name=CLI%20for%20Microsoft%20365%20MCP%20Server&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40pnp%2Fcli-microsoft365-mcp-server%40latest%22%5D%7D&quality=insiders)
+
 ## 💡 Description
 
 This MCP server allows the use of natural language to execute any CLI for Microsoft 365 commands. It may handle complex prompts that will be executed as a chain of CLI for Microsoft 365 commands that will try to fulfill the user's request. Thanks to this, you may manage many different areas of Microsoft 365, for example: Entra ID, OneDrive, OneNote, Outlook, Planner, Power Apps, Power Automate, Power Platform, SharePoint Embedded, SharePoint Online, Teams, Viva Engage, and many more...
