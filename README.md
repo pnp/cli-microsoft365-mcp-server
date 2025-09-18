@@ -1,4 +1,9 @@
-# CLI for Microsoft 365 MCP Server
+<h1 align="center">
+  <a href="https://github.com/pnp/cli-microsoft365-mcp-server">
+    <img alt="CLI for Microsoft 365 MCP Server" src="./assets/logo.png" height="150">
+  </a>
+  <br>CLI for Microsoft 365 MCP Server<br>
+</h1>
 
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_CLI_for_Microsoft_365_MCP_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=ffffff)](https://insiders.vscode.dev/redirect/mcp/install?name=CLI%20for%20Microsoft%20365%20MCP%20Server&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40pnp%2Fcli-microsoft365-mcp-server%40latest%22%5D%7D) [![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install_CLI_for_Microsoft_365_MCP_Server-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=ffffff)](https://insiders.vscode.dev/redirect/mcp/install?name=CLI%20for%20Microsoft%20365%20MCP%20Server&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40pnp%2Fcli-microsoft365-mcp-server%40latest%22%5D%7D&quality=insiders)
 
@@ -15,7 +20,13 @@ For best results, use it with Claude Sonnet 4 or Claude Sonnet 3.7.
 
 ## 🚀 Installation & Usage
 
-👉 Check out the [Getting Started recording 🎬](https://www.youtube.com/watch?v=p1PRLgN3Cqk)
+<h3>
+  👉 Check out the <a href="https://pnp.github.io/cli-microsoft365/user-guide/using-cli-mcp-server/" title="CLI for Microsoft 365 MCP Server Guide">CLI for Microsoft 365 MCP Server Guide</a>
+</h3>
+
+<h3>
+  👉 Check out the <a href="https://www.youtube.com/watch?v=p1PRLgN3Cqk" title="Getting Started recording">Getting Started recording 🎬</a>
+</h3>
 
 This MCP server uses the globally installed [CLI for Microsoft 365](https://pnp.github.io/cli-microsoft365) that you need to install globally using `npm i -g @pnp/cli-microsoft365`.
 
@@ -120,7 +131,7 @@ prompt:
 
 ## 🛠️ Tools
 
-| Column 1 | Column 2 |
+| Tool | Description |
 |----------|----------|
 | m365GetCommands | Gets all CLI for Microsoft 365 commands to be used by the Model Context Protocol to pick the right command for a given task |
 | m365GetCommandDocs | Gets documentation for a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to provide detailed information about the command along with examples, use cases, and option descriptions |
