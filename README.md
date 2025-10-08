@@ -110,6 +110,30 @@ Rest of the fields you may leave with default values.
 After that click on `Ctrl+S` to save the MCP server and `q` to exit the MCP form. 
 Now you should be able to use the CLI for Microsoft 365 MCP server in GitHub Copilot CLI by specifying it in your prompt, e.g. "Using CLI for Microsoft 365, I want you to...".
 
+### Add to Claude
+
+1. In Claude Desktop, open Settings by clicking on the hamburger icon in the top left corner.
+2. Select File > Settings (or press `Ctrl + ,`)
+3. In the Developer tab, click Edit Config
+  Note: If you don't see the Developer tab, you need to enable it first from Help > Enable Developer Mode.
+4. This opens explorer, edit `claude_desktop_config.json` in your favorite text editor.
+Add the following configuration to the file.
+
+```json
+{
+  "mcpServers": {
+    "CLI-Microsoft365": {
+      "command": "npx",
+      "args": ["-y", "@pnp/cli-microsoft365-mcp-server@latest"]
+    }
+  }
+}
+```
+
+5. Exit Claude Desktop and restart it. Every time you make changes to the code or configuration, you need to restart Claude desktop for the changes to take effect.
+
+> Note: In Windows, Claude doesn't exit when you close the window, it runs in the background. You can find it in the system tray. Right-click on the icon and select Quit to exit the application completely.
+
 ## 🧠 LLM Suggestion 
 
 For best results, use it with Claude Sonnet 4 or Claude Sonnet 3.7.
