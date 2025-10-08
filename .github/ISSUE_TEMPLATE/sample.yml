@@ -1,0 +1,41 @@
+name: 🎬 Scenario
+description: Share a sample demo showcasing a scenario in which you used CLI for Microsoft 365 MCP server and we will share it with the community and promote it 🤩
+title: "🎬 [Scenario]: "
+labels: ["🎬 scenario demo"]
+type: "Task"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for showcasing how you use CLI for Microsoft 365 MCP server. You Rock! 🤩
+        
+        Please complete the below form to ensure we have the necessary details to add your sample and reshare it with the community! 
+        Sharing is Caring ♥️
+  - type: input
+    id: title
+    attributes:
+      label: Scenario title
+      description: Provide a clear and short title for your scenario.
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Scenario description
+      description: Provide a clear description explaining your sceanrio.
+    validations:
+      required: true
+  - type: textarea
+    id: recording
+    attributes:
+      label: 🎬 Attach a recording presenting your scenario and CLI for Microsoft 365 MCP server in action
+      description: If applicable, add screenshots or drawings to help explain your idea.
+    validations:
+      required: true
+  - type: textarea
+    id: more-info
+    attributes:
+      label: 🤔 Additional remarks or comments
+      description: Add any other context or information you would like to share with us.
+    validations:
+      required: false

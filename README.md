@@ -112,6 +112,21 @@ Now you should be able to use the CLI for Microsoft 365 MCP server in GitHub Cop
 
 ### Add to Claude
 
+When using [Claude Desktop](https://claude.ai/desktop) you may add the MCP server by doing either using the dedicated `.mcpb` file present in this repo (recommneded) or by adding it manually to the Claude Desktop configuration.
+
+#### Using the .mcpb file (recommended)
+
+1. Download the [cli-microsoft365-mcp-server.mcpb](./cli-microsoft365-mcp-server.mcpb) file from this repo.
+2. In Claude Desktop, open Settings by clicking on the hamburger icon in the top left corner.
+3. Select File > Settings (or press `Ctrl + ,`)
+4. In the Extensions tab, click 'Advanced settings' button
+5. In the 'Extension Developer' area, click on 'Install Extension' button ad select the downloaded `cli-microsoft365-mcp-server.mcpb` file.
+6. Confirm the installation by clicking on 'Install' button.
+
+All done! You should now be able to use the `CLI-Microsoft365` MCP server in Claude Desktop.  
+
+#### Manually add to Claude Desktop configuration
+
 1. In Claude Desktop, open Settings by clicking on the hamburger icon in the top left corner.
 2. Select File > Settings (or press `Ctrl + ,`)
 3. In the Developer tab, click Edit Config
@@ -134,9 +149,32 @@ Add the following configuration to the file.
 
 > Note: In Windows, Claude doesn't exit when you close the window, it runs in the background. You can find it in the system tray. Right-click on the icon and select Quit to exit the application completely.
 
-## 🧠 LLM Suggestion 
+All done! You should now be able to use the `CLI-Microsoft365` MCP server in Claude Desktop.
 
-For best results, use it with Claude Sonnet 4 or Claude Sonnet 3.7.
+### Add to Cursor
+
+When using [Cursor](https://www.cursor.so/) you can add the MCP server by doing the following:
+
+1. From the chat option pick the `Agent settings` option
+2. Go to `Tools & MCP` tab and click on `New MCP server`
+3. Modify the `mcp.json` configuration as follows:
+
+```json
+{
+  "mcpServers": {
+    "CLI for Microsoft 365 MCP Server": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@pnp/cli-microsoft365-mcp-server@latest"
+      ]
+    }
+  }
+}
+```
+
+4. Save and enable the 'CLI for Microsoft 365 MCP Server' in the `Tools & MCP` tab and wait for the tools to load.
 
 ## 📷 Use Cases
 
@@ -185,9 +223,19 @@ prompt:
 
 | Tool | Description |
 |----------|----------|
-| m365GetCommands | Gets all CLI for Microsoft 365 commands to be used by the Model Context Protocol to pick the right command for a given task |
+| m365SearchCommands | Searches CLI for Microsoft 365 commands using fuzzy search based on a query string. This is more efficient than getting all commands as it returns only relevant matches. Use this tool first to find relevant commands. |
 | m365GetCommandDocs | Gets documentation for a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to provide detailed information about the command along with examples, use cases, and option descriptions |
 | m365RunCommand | Runs a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to execute the command and return the result and reason over the response |
+| m365GetBestPractices | Gets best practices for using CLI for Microsoft 365 in scripts, including guidance on authentication checking, error handling, output handling, and configuration |
+
+## 🎓 Skills
+
+This repo includes custom GitHub Copilot skills that teach the AI how to use CLI for Microsoft 365 effectively. Skills are automatically loaded by GitHub Copilot when relevant tasks are detected.
+
+| Skill | Description |
+|-------|-------------|
+| `cli-microsoft365` | Guides Copilot on running `m365` commands directly in the terminal. Covers command syntax, authentication methods, output formatting, JMESPath filtering, and common patterns for managing SharePoint Online, Entra ID, Teams, Power Platform, and more. Use when asking Copilot to run CLI for Microsoft 365 commands interactively. |
+| `cli-microsoft365-script` | Guides Copilot on writing PowerShell scripts that automate Microsoft 365 management using `m365` commands. Covers script setup, structured error handling with the `Invoke-CLICommand` helper, CI/CD authentication, batch operations, CSV processing, and security best practices. Use when asking Copilot to create automation scripts. |
 
 ## 🏗️ How to build and run it locally
 
