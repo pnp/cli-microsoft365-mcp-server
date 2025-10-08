@@ -52,7 +52,7 @@ The MCP server will not do any authentication for you. You will need to first au
 
 Lastly, install the MCP server on your preferred MCP client, referring to the instructions of the picked MCP host. Below, you may find guidance for VS Code.
 
-### Add MCP to VS Code
+### Add to VS Code
 
 There are multiple ways to add the MCP server to VS Code. The most common way is to:
 
@@ -81,6 +81,34 @@ As a result, you should have the following configuration in your `.vscode/mcp.js
     }
 }
 ```
+
+Now when you open the GitHub Copilot chat in VS Code, you should be able to select the `CLI for Microsoft 365 MCP Server` from the list of available MCP servers and start using it to manage Microsoft 365 using natural language. In the prompt specify that "Using CLI for Microsoft 365, I want you to..." and GitHub Copilot Agent will use the MCP server to execute your request.
+
+### Add to GitHub Copilot CLI
+
+If you are using [GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli), you may add the CLI for Microsoft 365 MCP server to Copilot by doing the following:
+
+1. First of all start the [Copilot CLI](https://www.npmjs.com/package/@github/copilot) by running:
+
+```
+  copilot
+```
+
+2. Use the copilot mcp command to add the MCP server:
+
+```
+  /mcp add
+```
+
+3. This will open up the MCP form where you need to fill in the following details:
+- Server name: basically whatever you like, but do not use space bar characters, e.g `cli-microsoft365-mcp-server`
+- Server type: select `Local`
+- Command: `npx`
+- Arguments: `"-y", "@pnp/cli-microsoft365-mcp-server@latest"`
+Rest of the fields you may leave with default values.
+
+After that click on `Ctrl+S` to save the MCP server and `q` to exit the MCP form. 
+Now you should be able to use the CLI for Microsoft 365 MCP server in GitHub Copilot CLI by specifying it in your prompt, e.g. "Using CLI for Microsoft 365, I want you to...".
 
 ## 🧠 LLM Suggestion 
 
