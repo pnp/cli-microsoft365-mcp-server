@@ -112,6 +112,21 @@ Now you should be able to use the CLI for Microsoft 365 MCP server in GitHub Cop
 
 ### Add to Claude
 
+When using [Claude Desktop](https://claude.ai/desktop) you may add the MCP server by doing either using the dedicated `.mcpb` file present in this repo (recommneded) or by adding it manually to the Claude Desktop configuration.
+
+#### Using the .mcpb file (recommended)
+
+1. Download the [cli-microsoft365-mcp-server.mcpb](./cli-microsoft365-mcp-server.mcpb) file from this repo.
+2. In Claude Desktop, open Settings by clicking on the hamburger icon in the top left corner.
+3. Select File > Settings (or press `Ctrl + ,`)
+4. In the Extensions tab, click 'Advanced settings' button
+5. In the 'Extension Developer' area, click on 'Install Extension' button ad select the downloaded `cli-microsoft365-mcp-server.mcpb` file.
+6. Confirm the installation by clicking on 'Install' button.
+
+All done! You should now be able to use the `CLI-Microsoft365` MCP server in Claude Desktop.  
+
+#### Manually add to Claude Desktop configuration
+
 1. In Claude Desktop, open Settings by clicking on the hamburger icon in the top left corner.
 2. Select File > Settings (or press `Ctrl + ,`)
 3. In the Developer tab, click Edit Config
@@ -133,6 +148,8 @@ Add the following configuration to the file.
 5. Exit Claude Desktop and restart it. Every time you make changes to the code or configuration, you need to restart Claude desktop for the changes to take effect.
 
 > Note: In Windows, Claude doesn't exit when you close the window, it runs in the background. You can find it in the system tray. Right-click on the icon and select Quit to exit the application completely.
+
+All done! You should now be able to use the `CLI-Microsoft365` MCP server in Claude Desktop.
 
 ## 🧠 LLM Suggestion 
 

@@ -1,0 +1,59 @@
+{
+  "manifest_version": "0.2",
+  "name": "cli-microsoft365-mcp-server",
+  "display_name": "Microsoft365-MCP",
+  "version": "0.1.15",
+  "description": "Model Context Protocol (MCP) server for CLI for Microsoft 365 that allows to use natural language to manage your Microsoft 365 tenant.",
+  "author": {
+    "name": "Microsoft 365 & Power Platform Community"
+  },
+  "homepage": "https://github.com/pnp/cli-microsoft365-mcp-server",
+  "documentation": "https://github.com/pnp/cli-microsoft365-mcp-server/wiki",
+  "support": "https://github.com/pnp/cli-microsoft365-mcp-server/issues",
+  "icon": "/assets/logo.png",
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/dist/index.js"
+      ],
+      "env": {}
+    }
+  },
+  "tools": [
+    {
+      "name": "m365GetCommands",
+      "description": "Gets all CLI for Microsoft 365 commands to be used by the Model Context Protocol to pick the right command for a given task"
+    },
+    {
+      "name": "m365GetCommandDocs",
+      "description": "Gets documentation for a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to provide detailed information about the command along with examples, use cases, and option descriptions"
+    },
+    {
+      "name": "m365RunCommand",
+      "description": "Runs a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to execute the command and return the result and reason over the response"
+    }
+  ],
+  "keywords": [
+    "Microsoft 365",
+    "SharePoint Online",
+    "Entra ID",
+    "OneDrive",
+    "OneNote",
+    "Outlook",
+    "Planner",
+    "Power Apps",
+    "Power Automate",
+    "Power Platform",
+    "SharePoint Embedded",
+    "Teams",
+    "Viva Engage"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pnp/cli-microsoft365-mcp-server.git"
+  }
+}
