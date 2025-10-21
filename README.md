@@ -265,9 +265,14 @@ npx @modelcontextprotocol/inspector node dist/index.js
 
 After that, wait for the inspector to start and open the inspector in your browser. You should see the MCP server running, and you should be able to query the tools and execute them locally.
 
+## Glama
+
+<a href="https://glama.ai/mcp/servers/@pnp/cli-microsoft365-mcp-server">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@pnp/cli-microsoft365-mcp-server/badge" alt="Microsoft 365 Server MCP server" />
+</a>
+
 ## 🔗 Resources
 
 - [typescript-sdk](https://github.com/modelcontextprotocol/typescript-sdk/tree/main)
 - [MCP servers](https://github.com/modelcontextprotocol/servers?tab=readme-ov-file)
 - [MCP inspector](https://github.com/modelcontextprotocol/inspector)
-
