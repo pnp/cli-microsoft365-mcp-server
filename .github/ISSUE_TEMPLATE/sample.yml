@@ -11,7 +11,7 @@ body:
         
         Please complete the below form to ensure we have the necessary details to add your sample and reshare it with the community! 
         Sharing is Caring ♥️
-  - type: text
+  - type: input
     id: title
     attributes:
       label: Scenario title
