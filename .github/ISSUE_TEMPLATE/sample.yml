@@ -21,7 +21,7 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: 
+      label: Scenario description
       description: Provide a clear description explaining your sceanrio.
     validations:
       required: true
