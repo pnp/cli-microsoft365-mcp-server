@@ -4,6 +4,11 @@ import { promises as fs } from 'fs';
 
 
 export async function runCliCommand(command: string): Promise<string> {
+    // Ensure --output json is always present
+    if (!command.includes('--output')) {
+        command = `${command} --output json`;
+    }
+    
     return new Promise((resolve, reject) => {
         const subprocess = spawn(command, {
             shell: true,
