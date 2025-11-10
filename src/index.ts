@@ -60,5 +60,17 @@ server.registerTool(
     })
 );
 
+server.registerTool(
+    'm365_get_best_practices',
+    {
+        title: 'Retrieve CLI for Microsoft 365 best practices',
+        description: 'Gets best practices for using CLI for Microsoft 365 in scripts, including guidance on authentication checking, error handling, output handling, and configuration',
+        inputSchema: {}
+    },
+    async ({ }) => ({
+        content: [{ type: 'text', text: await util.getBestPractices() }]
+    })
+);
+
 const transport = new StdioServerTransport();
 await server.connect(transport);
