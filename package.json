@@ -37,7 +37,7 @@
     "inspect": "npx -y @modelcontextprotocol/inspector node dist/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.19.1"
+    "@modelcontextprotocol/sdk": "1.23.0"
   },
   "devDependencies": {
     "@types/node": "24.7.0",
