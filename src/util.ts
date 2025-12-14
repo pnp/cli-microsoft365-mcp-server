@@ -4,9 +4,18 @@ import { promises as fs } from 'fs';
 
 
 export async function runCliCommand(command: string): Promise<string> {
-    if (!command.includes('--output')) {
+    let isJsonOutput = false;
+    // Check if --output flag is already present (using precise pattern to avoid matching --output-file etc.)
+    if (!/--output(?:\s|=|$)/.test(command)) {
         const commandPart = command.split('--')[0].trim();
-        command += commandPart.endsWith(' list') ? ' --output csv' : ' --output json';
+        if (commandPart.endsWith(' list')) {
+            command += ' --output csv';
+        } else {
+            command += ' --output json';
+            isJsonOutput = true;
+        }
+    } else if (/--output[=\s]+json\b/.test(command)) {
+        isJsonOutput = true;
     }
     
     return new Promise((resolve, reject) => {
@@ -28,7 +37,13 @@ export async function runCliCommand(command: string): Promise<string> {
 
         subprocess.on('close', (code) => {
             if (code === 0) {
-                resolve(output.trim());
+                const trimmedOutput = output.trim();
+                // Compact JSON output to reduce token usage
+                if (isJsonOutput) {
+                    resolve(compactJson(trimmedOutput));
+                } else {
+                    resolve(trimmedOutput);
+                }
             } else {
                 reject(new Error(error.trim() || `Command failed with exit code ${code}`));
             }
@@ -123,4 +138,15 @@ async function checkGlobalPackage(packageName: string, filePath: string): Promis
             }
         });
     });
+}
+
+function compactJson(output: string): string {
+    try {
+        // Try to parse and re-stringify the output to compact it
+        const parsed = JSON.parse(output);
+        return JSON.stringify(parsed);
+    } catch {
+        // If it's not valid JSON, return as-is
+        return output;
+    }
 }

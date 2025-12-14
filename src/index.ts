@@ -24,7 +24,7 @@ server.registerTool(
             content: [
                 { type: 'text', text: "TIP: Before executing any of the command run the 'm365_get_command_docs' tool to retrieve more context about it" },
                 { type: 'text', text: "TIP: avoid setting the '--output' option when running commands. The optimal output format is automatically selected in 'm365_run_command' tool based on the command type." },
-                { type: 'text', text: JSON.stringify(commands, null, 2) }
+                { type: 'text', text: JSON.stringify(commands) }
             ]
         };
     }
