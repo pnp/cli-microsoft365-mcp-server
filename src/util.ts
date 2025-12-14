@@ -13,7 +13,7 @@ export async function runCliCommand(command: string): Promise<string> {
             command += ' --output json';
             isJsonOutput = true;
         }
-    } else if (command.includes('--output json')) {
+    } else if (/--output\s+json\b/.test(command)) {
         isJsonOutput = true;
     }
     
