@@ -4,9 +4,9 @@ import { promises as fs } from 'fs';
 
 
 export async function runCliCommand(command: string): Promise<string> {
-    // Ensure --output json is always present
     if (!command.includes('--output')) {
-        command = `${command} --output json`;
+        const commandPart = command.split('--')[0].trim();
+        command += commandPart.endsWith(' list') ? ' --output csv' : ' --output json';
     }
     
     return new Promise((resolve, reject) => {
