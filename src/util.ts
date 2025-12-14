@@ -5,7 +5,8 @@ import { promises as fs } from 'fs';
 
 export async function runCliCommand(command: string): Promise<string> {
     let isJsonOutput = false;
-    if (!command.includes('--output')) {
+    // Check if --output flag is already present (using precise pattern to avoid matching --output-file etc.)
+    if (!/--output(?:\s|=|$)/.test(command)) {
         const commandPart = command.split('--')[0].trim();
         if (commandPart.endsWith(' list')) {
             command += ' --output csv';
@@ -13,7 +14,7 @@ export async function runCliCommand(command: string): Promise<string> {
             command += ' --output json';
             isJsonOutput = true;
         }
-    } else if (/--output\s+json\b/.test(command)) {
+    } else if (/--output[=\s]+json\b/.test(command)) {
         isJsonOutput = true;
     }
     
