@@ -22,7 +22,8 @@ server.registerTool(
         const commands = await util.getAllCommands();
         return {
             content: [
-                { type: 'text', text: "TIP: Before executing any of the command run the 'm365GetCommandDocs' tool to retrieve more context about it" },
+                { type: 'text', text: "TIP: Before executing any of the command run the 'm365_get_command_docs' tool to retrieve more context about it" },
+                { type: 'text', text: "TIP: avoid setting the '--output' option when running commands. The optimal output format is automatically selected in 'm365_run_command' tool based on the command type." },
                 { type: 'text', text: JSON.stringify(commands, null, 2) }
             ]
         };
@@ -41,7 +42,10 @@ server.registerTool(
         }
     },
     async ({ commandName, docs }) => ({
-        content: [{ type: 'text', text: await util.getCommandDocs(commandName, docs) }]
+        content: [
+            { type: 'text', text: "TIP: avoid setting the '--output' option when running commands. The optimal output format is automatically selected in 'm365_run_command' tool based on the command type." },
+            { type: 'text', text: await util.getCommandDocs(commandName, docs) }
+        ]
     })
 );
 
@@ -52,7 +56,7 @@ server.registerTool(
         description: 'Runs a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to execute the command and return the result and reason over the response',
         inputSchema:
         {
-            command: z.string().describe('command name which should be run')
+            command: z.string().describe('command name which should be executed')
         }
     },
     async ({ command }) => ({

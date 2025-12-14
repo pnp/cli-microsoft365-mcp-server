@@ -4,6 +4,11 @@ import { promises as fs } from 'fs';
 
 
 export async function runCliCommand(command: string): Promise<string> {
+    if (!command.includes('--output')) {
+        const commandPart = command.split('--')[0].trim();
+        command += commandPart.endsWith(' list') ? ' --output csv' : ' --output json';
+    }
+    
     return new Promise((resolve, reject) => {
         const subprocess = spawn(command, {
             shell: true,
