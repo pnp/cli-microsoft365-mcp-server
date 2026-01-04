@@ -40,7 +40,7 @@
     "@modelcontextprotocol/sdk": "1.24.3"
   },
   "devDependencies": {
-    "@types/node": "25.0.2",
+    "@types/node": "25.0.3",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
   }
