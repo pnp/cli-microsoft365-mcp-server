@@ -44,6 +44,16 @@ server.registerTool(
     async ({ query, limit }) => {
         const maxLimit = Math.min(limit || 10, 50);
         const commands = await util.searchCommands(query, maxLimit);
+        
+        // Check if the result contains an error
+        if (commands.length > 0 && 'error' in commands[0]) {
+            return {
+                content: [
+                    { type: 'text', text: JSON.stringify(commands) }
+                ]
+            };
+        }
+        
         return {
             content: [
                 { type: 'text', text: `Found ${commands.length} command(s) matching "${query}"` },
