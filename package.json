@@ -37,7 +37,8 @@
     "inspect": "npx -y @modelcontextprotocol/inspector node dist/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.25.2"
+    "@modelcontextprotocol/sdk": "1.25.2",
+    "fuse.js": "7.1.0"
   },
   "devDependencies": {
     "@types/node": "25.0.9",
