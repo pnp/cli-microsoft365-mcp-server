@@ -119,7 +119,7 @@ export async function searchCommands(query: string, limit: number = 10): Promise
         const allCommands = await getAllCommands();
         
         // Check if there was an error retrieving commands
-        if (allCommands.length === 1 && 'error' in allCommands[0]) {
+        if (allCommands.length > 0 && 'error' in allCommands[0]) {
             return allCommands;
         }
 
