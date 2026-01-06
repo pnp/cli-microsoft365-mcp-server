@@ -1,6 +1,7 @@
 import { exec, spawn } from 'child_process';
 import path from 'path';
 import { promises as fs } from 'fs';
+import Fuse from 'fuse.js';
 
 
 export async function runCliCommand(command: string): Promise<string> {
@@ -101,6 +102,39 @@ export async function getAllCommands(): Promise<any[]> {
         }];
     }
     return commands;
+}
+
+export async function searchCommands(query: string, limit: number = 10): Promise<any[]> {
+    try {
+        const allCommands = await getAllCommands();
+        
+        // Check if there was an error retrieving commands
+        if (allCommands.length === 1 && allCommands[0].error) {
+            return allCommands;
+        }
+
+        // Configure Fuse.js for fuzzy search
+        const fuse = new Fuse(allCommands, {
+            keys: [
+                { name: 'name', weight: 0.7 },
+                { name: 'description', weight: 0.3 }
+            ],
+            threshold: 0.4,
+            includeScore: true,
+            minMatchCharLength: 2
+        });
+
+        // Perform the search
+        const results = fuse.search(query);
+
+        // Return top matches, limiting to the specified number
+        return results.slice(0, limit).map((result: any) => result.item);
+    } catch (error) {
+        console.error('An error occurred during command search:', error);
+        return [{
+            error: `Failed to search commands: ${error}`
+        }];
+    }
 }
 
 async function CheckIfFileExists(filePath: string): Promise<boolean> {
