@@ -12,29 +12,10 @@ const server = new McpServer({
 });
 
 server.registerTool(
-    'm365_get_commands',
-    {
-        title: 'Retrieve CLI for Microsoft 365 commands',
-        description: 'Gets all CLI for Microsoft 365 commands to be used by the Model Context Protocol to pick the right command for a given task. Note: This returns ALL commands and uses many tokens. Consider using m365_search_commands first to find relevant commands more efficiently.',
-        inputSchema: {}
-    },
-    async ({ }) => {
-        const commands = await util.getAllCommands();
-        return {
-            content: [
-                { type: 'text', text: "TIP: Before executing any of the command run the 'm365_get_command_docs' tool to retrieve more context about it" },
-                { type: 'text', text: "TIP: avoid setting the '--output' option when running commands. The optimal output format is automatically selected in 'm365_run_command' tool based on the command type." },
-                { type: 'text', text: JSON.stringify(commands) }
-            ]
-        };
-    }
-);
-
-server.registerTool(
     'm365_search_commands',
     {
         title: 'Search CLI for Microsoft 365 commands',
-        description: 'Searches CLI for Microsoft 365 commands using fuzzy search based on a query string. This is more efficient than getting all commands as it returns only relevant matches. Use this tool first to find relevant commands before getting full command list or documentation.',
+        description: 'Searches CLI for Microsoft 365 commands using fuzzy search based on a query string. Use this tool first to find relevant commands before getting full command documentation.',
         inputSchema:
         {
             query: z.string().describe('Search query to find relevant commands (e.g., "sharepoint list", "teams channel", "user add")'),
@@ -57,7 +38,7 @@ server.registerTool(
         return {
             content: [
                 { type: 'text', text: `Found ${commands.length} command(s) matching "${query}"` },
-                { type: 'text', text: "TIP: Before executing any of the command run the 'm365_get_command_docs' tool to retrieve more context about it" },
+                { type: 'text', text: "TIP: Before executing any of the commands run the 'm365_get_command_docs' tool to retrieve more context about it" },
                 { type: 'text', text: "TIP: avoid setting the '--output' option when running commands. The optimal output format is automatically selected in 'm365_run_command' tool based on the command type." },
                 { type: 'text', text: JSON.stringify(commands) }
             ]

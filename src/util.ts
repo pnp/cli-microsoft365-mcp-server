@@ -90,30 +90,6 @@ export async function getCommandDocs(commandName: string, docs: string): Promise
     }
 }
 
-export async function getAllCommands(): Promise<Command[] | CommandError[]> {
-    let commands: Command[] = [];
-    try {
-        const filePath = await checkGlobalPackage('@pnp/cli-microsoft365', 'allCommandsFull.json');
-        if (!filePath)
-            throw new Error('@pnp/cli-microsoft365 npm package not found or allCommandsFull.json file not found');
-
-        const fileContent = await fs.readFile(filePath, 'utf-8');
-        const cliCommands = JSON.parse(fileContent);
-        commands = cliCommands
-            .map((command: any) => ({
-                name: `m365 ${command.name}`,
-                description: command.description,
-                docs: command.help
-            }));
-    } catch (error) {
-        console.error('An error occurred:', error);
-        return [{
-            error: `Failed to retrieve commands: ${error}`
-        }];
-    }
-    return commands;
-}
-
 export async function searchCommands(query: string, limit: number = 10): Promise<Command[] | CommandError[]> {
     try {
         const allCommands = await getAllCommands();
@@ -145,6 +121,30 @@ export async function searchCommands(query: string, limit: number = 10): Promise
             error: `Failed to search commands: ${error}`
         }];
     }
+}
+
+async function getAllCommands(): Promise<Command[] | CommandError[]> {
+    let commands: Command[] = [];
+    try {
+        const filePath = await checkGlobalPackage('@pnp/cli-microsoft365', 'allCommandsFull.json');
+        if (!filePath)
+            throw new Error('@pnp/cli-microsoft365 npm package not found or allCommandsFull.json file not found');
+
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const cliCommands = JSON.parse(fileContent);
+        commands = cliCommands
+            .map((command: any) => ({
+                name: `m365 ${command.name}`,
+                description: command.description,
+                docs: command.help
+            }));
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return [{
+            error: `Failed to retrieve commands: ${error}`
+        }];
+    }
+    return commands;
 }
 
 async function CheckIfFileExists(filePath: string): Promise<boolean> {
