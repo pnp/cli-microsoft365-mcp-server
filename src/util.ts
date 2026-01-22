@@ -1,6 +1,17 @@
 import { exec, spawn } from 'child_process';
 import path from 'path';
 import { promises as fs } from 'fs';
+import Fuse from 'fuse.js';
+
+interface Command {
+    name: string;
+    description: string;
+    docs: string;
+}
+
+interface CommandError {
+    error: string;
+}
 
 
 export async function runCliCommand(command: string): Promise<string> {
@@ -79,8 +90,41 @@ export async function getCommandDocs(commandName: string, docs: string): Promise
     }
 }
 
-export async function getAllCommands(): Promise<any[]> {
-    let commands: any[] = [];
+export async function searchCommands(query: string, limit: number = 10): Promise<Command[] | CommandError[]> {
+    try {
+        const allCommands = await getAllCommands();
+        
+        // Check if there was an error retrieving commands
+        if (allCommands.length > 0 && 'error' in allCommands[0]) {
+            return allCommands;
+        }
+
+        // Configure Fuse.js for fuzzy search
+        const fuse = new Fuse(allCommands as Command[], {
+            keys: [
+                { name: 'name', weight: 0.7 },
+                { name: 'description', weight: 0.3 }
+            ],
+            threshold: 0.4,
+            includeScore: true,
+            minMatchCharLength: 2
+        });
+
+        // Perform the search
+        const results = fuse.search(query);
+
+        // Return top matches, limiting to the specified number
+        return results.slice(0, limit).map(result => result.item);
+    } catch (error) {
+        console.error('An error occurred during command search:', error);
+        return [{
+            error: `Failed to search commands: ${error}`
+        }];
+    }
+}
+
+async function getAllCommands(): Promise<Command[] | CommandError[]> {
+    let commands: Command[] = [];
     try {
         const filePath = await checkGlobalPackage('@pnp/cli-microsoft365', 'allCommandsFull.json');
         if (!filePath)
