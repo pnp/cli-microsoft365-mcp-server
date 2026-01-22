@@ -203,7 +203,6 @@ prompt:
 | Tool | Description |
 |----------|----------|
 | m365SearchCommands | Searches CLI for Microsoft 365 commands using fuzzy search based on a query string. This is more efficient than getting all commands as it returns only relevant matches. Use this tool first to find relevant commands. |
-| m365GetCommands | Gets all CLI for Microsoft 365 commands to be used by the Model Context Protocol to pick the right command for a given task. Note: This returns ALL commands and uses many tokens. Consider using m365SearchCommands first. |
 | m365GetCommandDocs | Gets documentation for a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to provide detailed information about the command along with examples, use cases, and option descriptions |
 | m365RunCommand | Runs a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to execute the command and return the result and reason over the response |
 
