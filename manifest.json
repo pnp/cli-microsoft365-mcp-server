@@ -2,7 +2,7 @@
   "manifest_version": "0.2",
   "name": "cli-microsoft365-mcp-server",
   "display_name": "Microsoft365-MCP",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "Model Context Protocol (MCP) server for CLI for Microsoft 365 that allows to use natural language to manage your Microsoft 365 tenant.",
   "author": {
     "name": "Microsoft 365 & Power Platform Community"
