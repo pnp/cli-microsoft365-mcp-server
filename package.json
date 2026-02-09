@@ -41,7 +41,7 @@
     "fuse.js": "7.1.0"
   },
   "devDependencies": {
-    "@types/node": "25.0.9",
+    "@types/node": "25.2.2",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
   }
