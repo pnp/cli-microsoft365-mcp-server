@@ -1,9 +1,34 @@
 import { exec, spawn } from 'child_process';
 import path from 'path';
 import { promises as fs } from 'fs';
+import Fuse from 'fuse.js';
+
+interface Command {
+    name: string;
+    description: string;
+    docs: string;
+}
+
+interface CommandError {
+    error: string;
+}
 
 
 export async function runCliCommand(command: string): Promise<string> {
+    let isJsonOutput = false;
+    // Check if --output flag is already present (using precise pattern to avoid matching --output-file etc.)
+    if (!/--output(?:\s|=|$)/.test(command)) {
+        const commandPart = command.split('--')[0].trim();
+        if (commandPart.endsWith(' list')) {
+            command += ' --output csv';
+        } else {
+            command += ' --output json';
+            isJsonOutput = true;
+        }
+    } else if (/--output[=\s]+json\b/.test(command)) {
+        isJsonOutput = true;
+    }
+    
     return new Promise((resolve, reject) => {
         const subprocess = spawn(command, {
             shell: true,
@@ -23,7 +48,13 @@ export async function runCliCommand(command: string): Promise<string> {
 
         subprocess.on('close', (code) => {
             if (code === 0) {
-                resolve(output.trim());
+                const trimmedOutput = output.trim();
+                // Compact JSON output to reduce token usage
+                if (isJsonOutput) {
+                    resolve(compactJson(trimmedOutput));
+                } else {
+                    resolve(trimmedOutput);
+                }
             } else {
                 reject(new Error(error.trim() || `Command failed with exit code ${code}`));
             }
@@ -59,8 +90,60 @@ export async function getCommandDocs(commandName: string, docs: string): Promise
     }
 }
 
-export async function getAllCommands(): Promise<any[]> {
-    let commands: any[] = [];
+export async function searchCommands(query: string, limit: number = 10): Promise<Command[] | CommandError[]> {
+    try {
+        const allCommands = await getAllCommands();
+        
+        // Check if there was an error retrieving commands
+        if (allCommands.length > 0 && 'error' in allCommands[0]) {
+            return allCommands;
+        }
+
+        // Configure Fuse.js for fuzzy search
+        const fuse = new Fuse(allCommands as Command[], {
+            keys: [
+                { name: 'name', weight: 0.7 },
+                { name: 'description', weight: 0.3 }
+            ],
+            threshold: 0.4,
+            includeScore: true,
+            minMatchCharLength: 2
+        });
+
+        // Perform the search
+        const results = fuse.search(query);
+
+        // Return top matches, limiting to the specified number
+        return results.slice(0, limit).map(result => result.item);
+    } catch (error) {
+        console.error('An error occurred during command search:', error);
+        return [{
+            error: `Failed to search commands: ${error}`
+        }];
+    }
+}
+
+export async function getBestPractices(): Promise<string> {
+    try {
+        // Fetch the best-practices.md file from the GitHub repository
+        // Using the main branch as the source of truth
+        const url = 'https://raw.githubusercontent.com/pnp/cli-microsoft365-mcp-server/main/best-practices.md';
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch best practices from ${url}: ${response.status} ${response.statusText}`);
+        }
+        
+        const content = await response.text();
+        return content;
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return `Failed to retrieve best practices from GitHub. Error: ${error}`;
+    }
+}
+
+async function getAllCommands(): Promise<Command[] | CommandError[]> {
+    let commands: Command[] = [];
     try {
         const filePath = await checkGlobalPackage('@pnp/cli-microsoft365', 'allCommandsFull.json');
         if (!filePath)
@@ -120,21 +203,13 @@ async function checkGlobalPackage(packageName: string, filePath: string): Promis
     });
 }
 
-export async function getBestPractices(): Promise<string> {
+function compactJson(output: string): string {
     try {
-        // Fetch the best-practices.md file from the GitHub repository
-        // Using the main branch as the source of truth
-        const url = 'https://raw.githubusercontent.com/pnp/cli-microsoft365-mcp-server/main/best-practices.md';
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            throw new Error(`Failed to fetch best practices from ${url}: ${response.status} ${response.statusText}`);
-        }
-        
-        const content = await response.text();
-        return content;
-    } catch (error) {
-        console.error('An error occurred:', error);
-        return `Failed to retrieve best practices from GitHub. Error: ${error}`;
+        // Try to parse and re-stringify the output to compact it
+        const parsed = JSON.parse(output);
+        return JSON.stringify(parsed);
+    } catch {
+        // If it's not valid JSON, return as-is
+        return output;
     }
 }

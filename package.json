@@ -1,6 +1,6 @@
 {
   "name": "@pnp/cli-microsoft365-mcp-server",
-  "version": "0.1.15",
+  "version": "0.1.17",
   "description": "Model Context Protocol (MCP) server for CLI for Microsoft 365 that allows to use natural language to manage your Microsoft 365 tenant.",
   "author": "Microsoft 365 & Power Platform Community",
   "license": "MIT",
@@ -37,10 +37,11 @@
     "inspect": "npx -y @modelcontextprotocol/inspector node dist/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.19.1"
+    "@modelcontextprotocol/sdk": "1.26.0",
+    "fuse.js": "7.1.0"
   },
   "devDependencies": {
-    "@types/node": "24.7.0",
+    "@types/node": "25.2.3",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
   }
