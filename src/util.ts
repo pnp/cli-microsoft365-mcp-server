@@ -1,10 +1,6 @@
 import { exec, spawn } from 'child_process';
 import path from 'path';
 import { promises as fs } from 'fs';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 
 export async function runCliCommand(command: string): Promise<string> {
@@ -126,26 +122,19 @@ async function checkGlobalPackage(packageName: string, filePath: string): Promis
 
 export async function getBestPractices(): Promise<string> {
     try {
-        // The best-practices.md file is located in the root of the package
-        // When installed via npm, it will be in the package directory
-        // During development, it's in the parent directory of dist
-        const possiblePaths = [
-            path.join(__dirname, '..', 'best-practices.md'), // Development: dist/../best-practices.md
-            path.join(__dirname, 'best-practices.md'), // Installed: might be in dist
-            path.join(process.cwd(), 'best-practices.md') // Fallback: current working directory
-        ];
-
-        for (const filePath of possiblePaths) {
-            const fileExists = await CheckIfFileExists(filePath);
-            if (fileExists) {
-                const fileContent = await fs.readFile(filePath, 'utf-8');
-                return fileContent;
-            }
+        // Fetch the best-practices.md file from the GitHub repository
+        // Using the main branch as the source of truth
+        const url = 'https://raw.githubusercontent.com/pnp/cli-microsoft365-mcp-server/main/best-practices.md';
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch best practices: ${response.status} ${response.statusText}`);
         }
-
-        throw new Error('Best practices file not found');
+        
+        const content = await response.text();
+        return content;
     } catch (error) {
         console.error('An error occurred:', error);
-        return `Failed to retrieve best practices: ${error}`;
+        return `Failed to retrieve best practices from GitHub. Error: ${error}`;
     }
 }

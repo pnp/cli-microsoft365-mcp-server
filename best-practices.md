@@ -1,33 +1,22 @@
 # Best Practices for Using CLI for Microsoft 365 in Scripts
 
-This guide provides best practices for using CLI for Microsoft 365 commands in scripts, including how to check authentication, handle errors, and manage output.
+This guide provides best practices for using CLI for Microsoft 365 commands in PowerShell scripts, including how to check authentication, handle errors, and manage output.
 
 ## Authentication Best Practices
 
 ### Check Authentication Status
 
-Before running any CLI for Microsoft 365 commands in your script, always verify that you are authenticated:
+Before running any CLI for Microsoft 365 commands in your script, use the `m365 login --ensure` command to verify and establish authentication if needed:
 
-**PowerShell:**
 ```powershell
-$status = m365 status --output json | ConvertFrom-Json
-if ($status.connectedAs -eq $null) {
-    Write-Error "Not logged in to Microsoft 365. Please run 'm365 login' first."
-    exit 1
-}
+m365 login --ensure
 ```
 
-**Bash/Zsh:**
-```bash
-if ! m365 status > /dev/null 2>&1; then
-    echo "Not logged in to Microsoft 365. Please run 'm365 login' first." >&2
-    exit 1
-fi
-```
+This command will check if you are already authenticated and only prompt for login if necessary.
 
 ### Authentication Methods
 
-- **Interactive scenarios**: Use device code flow (`m365 login`) or browser authentication
+- **Interactive scenarios**: Use device code flow (`m365 login`) or browser authentication (`m365 login --authType browser`)
 - **Automation/CI-CD**: Use certificate-based authentication (`--authType certificate`) or secret-based authentication (`--authType secret`)
 - **Avoid** using username/password authentication when possible, as it doesn't support MFA and other advanced security features
 
@@ -37,7 +26,6 @@ fi
 
 Set these configuration options before running your script to ensure consistent behavior:
 
-**PowerShell:**
 ```powershell
 # Set output to JSON for easier parsing
 m365 cli config set --key output --value json
@@ -52,26 +40,24 @@ m365 cli config set --key helpMode --value full
 $env:CLIMICROSOFT365_NOUPDATE = "1"
 ```
 
-**Bash/Zsh:**
-```bash
-# Set output to JSON for easier parsing
-m365 cli config set --key output --value json
-
-# Disable prompts for non-interactive execution
-m365 cli config set --key prompt --value false
-
-# Get detailed error information
-m365 cli config set --key helpMode --value full
-
-# For scripts, disable update checks to avoid delays
-export CLIMICROSOFT365_NOUPDATE=1
-```
-
 ## Error Handling Best Practices
 
-### PowerShell Error Handling
+### Approach 1: Check Exit Code
 
-PowerShell has unique error handling requirements. Use these settings and helper function:
+The simplest approach is to run the CLI command and check the exit code:
+
+```powershell
+m365 spo site get --url "https://contoso.sharepoint.com/sites/Marketing"
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Failed to retrieve site." -ForegroundColor Red
+    exit 1
+}
+Write-Host "Site retrieved successfully"
+```
+
+### Approach 2: PowerShell Error Handling with Helper Function
+
+PowerShell has unique error handling requirements. Use these settings and helper function for more detailed error handling:
 
 ```powershell
 # Configure CLI for better PowerShell error handling
@@ -114,49 +100,12 @@ catch {
 }
 ```
 
-### Bash/Zsh Error Handling
-
-For Bash/Zsh scripts, use standard error handling:
-
-```bash
-#!/bin/bash
-set -e  # Exit on error
-set -o pipefail  # Catch errors in pipes
-
-# Function to handle CLI errors
-run_m365_command() {
-    local output
-    local exit_code
-    
-    output=$(m365 "$@" 2>&1)
-    exit_code=$?
-    
-    if [ $exit_code -ne 0 ]; then
-        echo "Error executing: m365 $*" >&2
-        echo "$output" >&2
-        return $exit_code
-    fi
-    
-    echo "$output"
-    return 0
-}
-
-# Usage example
-if ! site_data=$(run_m365_command spo site get --url "https://contoso.sharepoint.com/sites/Marketing" --output json); then
-    echo "Failed to retrieve site" >&2
-    exit 1
-fi
-
-echo "Site retrieved successfully"
-```
-
 ## Output Handling Best Practices
 
 ### JSON Output
 
 Always use JSON output for scripts as it's easier to parse:
 
-**PowerShell:**
 ```powershell
 # Retrieve and parse JSON output
 $sites = m365 spo site list --output json | ConvertFrom-Json
@@ -166,18 +115,11 @@ foreach ($site in $sites) {
 }
 ```
 
-**Bash/Zsh:**
-```bash
-# Using jq to parse JSON output
-sites=$(m365 spo site list --output json)
-echo "$sites" | jq -r '.[] | "\(.Url) - \(.Title)"'
-```
-
 ### Text Output
 
 For simple operations or when you just need to display results, text output can be useful:
 
-```bash
+```powershell
 # Simple text output
 m365 spo site list --output text
 ```
@@ -186,7 +128,7 @@ m365 spo site list --output text
 
 For data that will be processed in Excel or other tools:
 
-```bash
+```powershell
 # Export to CSV
 m365 spo site list --output csv > sites.csv
 ```
@@ -195,7 +137,6 @@ m365 spo site list --output csv > sites.csv
 
 ### Checking if a Resource Exists
 
-**PowerShell:**
 ```powershell
 try {
     $list = m365 spo list get --webUrl "https://contoso.sharepoint.com/sites/project" --title "Documents" --output json | ConvertFrom-Json | Invoke-CLICommand
@@ -212,21 +153,10 @@ catch {
 }
 ```
 
-**Bash/Zsh:**
-```bash
-if m365 spo list get --webUrl "https://contoso.sharepoint.com/sites/project" --title "Documents" > /dev/null 2>&1; then
-    echo "List exists"
-else
-    echo "List does not exist, creating..."
-    # Create list
-fi
-```
-
 ### Batch Operations
 
 When performing multiple operations, use loops:
 
-**PowerShell:**
 ```powershell
 $users = @("user1@contoso.com", "user2@contoso.com", "user3@contoso.com")
 
@@ -242,26 +172,12 @@ foreach ($user in $users) {
 }
 ```
 
-**Bash/Zsh:**
-```bash
-users=("user1@contoso.com" "user2@contoso.com" "user3@contoso.com")
-
-for user in "${users[@]}"; do
-    if m365 spo user add --webUrl "https://contoso.sharepoint.com/sites/project" --loginName "$user" > /dev/null 2>&1; then
-        echo "Added user: $user"
-    else
-        echo "Failed to add user: $user" >&2
-    fi
-done
-```
-
 ## Working with Complex Data
 
 ### Passing JSON Data
 
 When you need to pass complex JSON data, use files instead of inline strings:
 
-**PowerShell:**
 ```powershell
 # Store JSON in a file
 $jsonData = @{
@@ -276,27 +192,8 @@ $jsonData = @{
 
 $jsonData | Out-File -FilePath "theme-script.json" -Encoding utf8
 
-# Use file with @ prefix
-m365 spo sitescript add --title "Contoso Theme" --description "Applies Contoso theme" --content "@theme-script.json"
-```
-
-**Bash/Zsh:**
-```bash
-# Create JSON file
-cat > theme-script.json << 'EOF'
-{
-  "$schema": "https://developer.microsoft.com/json-schemas/sp/site-design-script-actions.schema.json",
-  "actions": [
-    {
-      "verb": "applyTheme",
-      "themeName": "Contoso Theme"
-    }
-  ]
-}
-EOF
-
-# Use file with @ prefix (escape @ in PowerShell with backtick: `@)
-m365 spo sitescript add --title "Contoso Theme" --description "Applies Contoso theme" --content @theme-script.json
+# Use file with @ prefix (note: in PowerShell, escape @ with backtick: `@)
+m365 spo sitescript add --title "Contoso Theme" --description "Applies Contoso theme" --content `@theme-script.json
 ```
 
 ## Special Tokens and Features
@@ -305,7 +202,7 @@ m365 spo sitescript add --title "Contoso Theme" --description "Applies Contoso t
 
 CLI for Microsoft 365 provides built-in tokens for the current user:
 
-```bash
+```powershell
 # Get current user's profile
 m365 entra user get --id "@meId"
 
@@ -317,7 +214,7 @@ m365 entra user get --userName "@meUserName"
 
 After running any SharePoint command, you can use server-relative URLs:
 
-```bash
+```powershell
 # First command establishes the SPO URL
 m365 spo site list
 
@@ -326,7 +223,8 @@ m365 spo site get --url /sites/project
 ```
 
 Or set it explicitly:
-```bash
+
+```powershell
 m365 spo set --url https://contoso.sharepoint.com
 ```
 
@@ -336,13 +234,14 @@ m365 spo set --url https://contoso.sharepoint.com
 
 Use verbose mode during development to see detailed operation information:
 
-```bash
+```powershell
 m365 spo site get --url "https://contoso.sharepoint.com/sites/project" --verbose
 ```
 
 Or set it via environment variable:
-```bash
-export CLIMICROSOFT365_VERBOSE=1
+
+```powershell
+$env:CLIMICROSOFT365_VERBOSE = "1"
 m365 spo site get --url "https://contoso.sharepoint.com/sites/project"
 ```
 
@@ -350,13 +249,14 @@ m365 spo site get --url "https://contoso.sharepoint.com/sites/project"
 
 For troubleshooting, enable debug mode to see all API requests and responses:
 
-```bash
+```powershell
 m365 spo site get --url "https://contoso.sharepoint.com/sites/project" --debug
 ```
 
 Or set it via environment variable:
-```bash
-export CLIMICROSOFT365_DEBUG=1
+
+```powershell
+$env:CLIMICROSOFT365_DEBUG = "1"
 m365 spo site get --url "https://contoso.sharepoint.com/sites/project"
 ```
 
@@ -366,27 +266,21 @@ m365 spo site get --url "https://contoso.sharepoint.com/sites/project"
 
 Disable automatic update checks for faster script execution:
 
-**PowerShell:**
 ```powershell
 $env:CLIMICROSOFT365_NOUPDATE = "1"
-```
-
-**Bash/Zsh:**
-```bash
-export CLIMICROSOFT365_NOUPDATE=1
 ```
 
 ### Use Specific Commands
 
 Instead of querying all resources and filtering, use specific commands with filters when available:
 
-```bash
+```powershell
 # Good - Direct query
 m365 spo site get --url "https://contoso.sharepoint.com/sites/project"
 
 # Less efficient - Getting all and filtering
 # Avoid when possible
-m365 spo site list | grep "project"
+m365 spo site list | Where-Object { $_.Url -like "*project*" }
 ```
 
 ## Security Best Practices
@@ -402,11 +296,11 @@ m365 spo site list | grep "project"
 5. **Store tokens securely** - Be aware that CLI for Microsoft 365 stores tokens and credentials in the user's profile directory.
 
 6. **Use app-only access** for automation scenarios:
-   ```bash
-   m365 login --authType certificate --certificateFile /path/to/cert.pfx --password certpass
+   ```powershell
+   m365 login --authType certificate --certificateFile C:\path\to\cert.pfx --password certpass
    ```
 
-## Script Template Examples
+## Script Template Example
 
 ### PowerShell Script Template
 
@@ -424,7 +318,7 @@ m365 cli config set --key printErrorsAsPlainText --value false
 m365 cli config set --key prompt --value false
 $env:CLIMICROSOFT365_NOUPDATE = "1"
 
-# Helper function for error handling
+# Helper function for error handling (optional - can use exit code checking instead)
 function Invoke-CLICommand {
   [cmdletbinding()]
   param(
@@ -442,19 +336,8 @@ function Invoke-CLICommand {
   return $parsedOutput
 }
 
-# Check authentication
-try {
-  $status = m365 status --output json | ConvertFrom-Json
-  if ($status.connectedAs -eq $null) {
-    Write-Error "Not logged in. Please run 'm365 login' first."
-    exit 1
-  }
-  Write-Host "Authenticated as: $($status.connectedAs)"
-}
-catch {
-  Write-Error "Failed to check authentication status: $($_.Exception.Message)"
-  exit 1
-}
+# Ensure authentication
+m365 login --ensure
 
 # Your script logic here
 try {
@@ -470,52 +353,46 @@ catch {
 Write-Host "Script completed successfully" -ForegroundColor Green
 ```
 
-### Bash/Zsh Script Template
+### Alternative Template with Exit Code Checking
 
-```bash
-#!/bin/bash
-
-# Exit on error and undefined variables
-set -euo pipefail
+```powershell
+#!/usr/bin/env pwsh
 
 # Configure CLI for Microsoft 365
 m365 cli config set --key output --value json
 m365 cli config set --key prompt --value false
-m365 cli config set --key helpMode --value full
-export CLIMICROSOFT365_NOUPDATE=1
+$env:CLIMICROSOFT365_NOUPDATE = "1"
 
-# Error handling function
-handle_error() {
-    echo "Error: $1" >&2
+# Ensure authentication
+m365 login --ensure
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Failed to authenticate"
     exit 1
 }
 
-# Check authentication
-if ! m365 status > /dev/null 2>&1; then
-    handle_error "Not logged in. Please run 'm365 login' first."
-fi
-
-echo "Authenticated successfully"
-
 # Your script logic here
-site_data=$(m365 spo site get --url "https://contoso.sharepoint.com/sites/project" --output json) || handle_error "Failed to get site"
+$siteUrl = "https://contoso.sharepoint.com/sites/project"
+$siteData = m365 spo site get --url $siteUrl --output json
 
-# Parse JSON using jq
-site_title=$(echo "$site_data" | jq -r '.Title')
-echo "Site Title: $site_title"
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Failed to get site"
+    exit 1
+}
 
-echo "Script completed successfully"
+$site = $siteData | ConvertFrom-Json
+Write-Host "Site Title: $($site.Title)"
+Write-Host "Script completed successfully" -ForegroundColor Green
 ```
 
 ## Summary
 
-Following these best practices will help you create robust, maintainable scripts using CLI for Microsoft 365:
+Following these best practices will help you create robust, maintainable PowerShell scripts using CLI for Microsoft 365:
 
-1. **Always check authentication** before running commands
-2. **Configure proper error handling** for your shell (PowerShell has special requirements)
+1. **Use `m365 login --ensure`** to check and establish authentication
+2. **Configure proper error handling** - either check exit codes or use the helper function approach
 3. **Use JSON output** for parsing in scripts
 4. **Disable prompts and update checks** for non-interactive execution
-5. **Use try/catch or set -e** for proper error handling
+5. **Use try/catch or check $LASTEXITCODE** for proper error handling
 6. **Store complex data in files** rather than inline strings
 7. **Use appropriate authentication methods** for your scenario (interactive vs. automated)
 8. **Enable verbose/debug mode** when troubleshooting
