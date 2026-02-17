@@ -123,6 +123,25 @@ export async function searchCommands(query: string, limit: number = 10): Promise
     }
 }
 
+export async function getBestPractices(): Promise<string> {
+    try {
+        // Fetch the best-practices.md file from the GitHub repository
+        // Using the main branch as the source of truth
+        const url = 'https://raw.githubusercontent.com/pnp/cli-microsoft365-mcp-server/main/best-practices.md';
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch best practices from ${url}: ${response.status} ${response.statusText}`);
+        }
+        
+        const content = await response.text();
+        return content;
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return `Failed to retrieve best practices from GitHub. Error: ${error}`;
+    }
+}
+
 async function getAllCommands(): Promise<Command[] | CommandError[]> {
     let commands: Command[] = [];
     try {
