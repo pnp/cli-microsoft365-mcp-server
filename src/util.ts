@@ -128,7 +128,7 @@ export async function getBestPractices(): Promise<string> {
         const response = await fetch(url);
         
         if (!response.ok) {
-            throw new Error(`Failed to fetch best practices: ${response.status} ${response.statusText}`);
+            throw new Error(`Failed to fetch best practices from ${url}: ${response.status} ${response.statusText}`);
         }
         
         const content = await response.text();
