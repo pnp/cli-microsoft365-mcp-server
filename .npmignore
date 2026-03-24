@@ -6,3 +6,4 @@ tsconfig.json
 *.tgz
 .env
 assets
+best-practices.md
