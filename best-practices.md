@@ -28,13 +28,13 @@ Set these configuration options before running your script to ensure consistent 
 
 ```powershell
 # Set output to JSON for easier parsing
-m365 cli config set --key output --value json
+m365 cli config set --key "output" --value "json"
 
 # Disable prompts for non-interactive execution
-m365 cli config set --key prompt --value false
+m365 cli config set --key "prompt" --value "false"
 
 # Get detailed error information
-m365 cli config set --key helpMode --value full
+m365 cli config set --key "helpMode" --value "full"
 
 # For scripts, disable update checks to avoid delays
 $env:CLIMICROSOFT365_NOUPDATE = "1"
@@ -61,10 +61,10 @@ PowerShell has unique error handling requirements. Use these settings and helper
 
 ```powershell
 # Configure CLI for better PowerShell error handling
-m365 cli config set --key output --value json
-m365 cli config set --key errorOutput --value stdout 
-m365 cli config set --key showHelpOnFailure --value false 
-m365 cli config set --key printErrorsAsPlainText --value false 
+m365 cli config set --key "output" --value "json"
+m365 cli config set --key "errorOutput" --value "stdout"
+m365 cli config set --key "showHelpOnFailure" --value "false"
+m365 cli config set --key "printErrorsAsPlainText" --value "false"
 
 # Helper function to handle CLI command errors properly
 function Invoke-CLICommand {
@@ -219,13 +219,13 @@ After running any SharePoint command, you can use server-relative URLs:
 m365 spo site list
 
 # Now you can use server-relative URLs
-m365 spo site get --url /sites/project
+m365 spo site get --url "/sites/project"
 ```
 
 Or set it explicitly:
 
 ```powershell
-m365 spo set --url https://contoso.sharepoint.com
+m365 spo set --url "https://contoso.sharepoint.com"
 ```
 
 ## Debugging and Verbose Output
@@ -260,16 +260,6 @@ $env:CLIMICROSOFT365_DEBUG = "1"
 m365 spo site get --url "https://contoso.sharepoint.com/sites/project"
 ```
 
-## Performance Optimization
-
-### Disable Update Checks in Scripts
-
-Disable automatic update checks for faster script execution:
-
-```powershell
-$env:CLIMICROSOFT365_NOUPDATE = "1"
-```
-
 ### Use Specific Commands
 
 Instead of querying all resources and filtering, use specific commands with filters when available:
@@ -297,7 +287,7 @@ m365 spo site list | Where-Object { $_.Url -like "*project*" }
 
 6. **Use app-only access** for automation scenarios:
    ```powershell
-   m365 login --authType certificate --certificateFile C:\path\to\cert.pfx --password certpass
+   m365 login --authType "certificate" --certificateFile "C:\path\to\cert.pfx" --password "certpass"
    ```
 
 ## Script Template Example
@@ -311,11 +301,11 @@ m365 spo site list | Where-Object { $_.Url -like "*project*" }
 $ErrorActionPreference = "Stop"
 
 # Configure CLI for Microsoft 365
-m365 cli config set --key output --value json
-m365 cli config set --key errorOutput --value stdout 
-m365 cli config set --key showHelpOnFailure --value false 
-m365 cli config set --key printErrorsAsPlainText --value false 
-m365 cli config set --key prompt --value false
+m365 cli config set --key "output" --value "json"
+m365 cli config set --key "errorOutput" --value "stdout"
+m365 cli config set --key "showHelpOnFailure" --value "false"
+m365 cli config set --key "printErrorsAsPlainText" --value "false"
+m365 cli config set --key "prompt" --value "false"
 $env:CLIMICROSOFT365_NOUPDATE = "1"
 
 # Helper function for error handling (optional - can use exit code checking instead)
@@ -359,8 +349,8 @@ Write-Host "Script completed successfully" -ForegroundColor Green
 #!/usr/bin/env pwsh
 
 # Configure CLI for Microsoft 365
-m365 cli config set --key output --value json
-m365 cli config set --key prompt --value false
+m365 cli config set --key "output" --value "json"
+m365 cli config set --key "prompt" --value "false"
 $env:CLIMICROSOFT365_NOUPDATE = "1"
 
 # Ensure authentication
