@@ -151,6 +151,31 @@ Add the following configuration to the file.
 
 All done! You should now be able to use the `CLI-Microsoft365` MCP server in Claude Desktop.
 
+### Add to Cursor
+
+When using [Cursor](https://www.cursor.so/) you can add the MCP server by doing the following:
+
+1. From the chat option pick the `Agent settings` option
+2. Go to `Tools & MCP` tab and click on `New MCP server`
+3. Modify the `mcp.json` configuration as follows:
+
+```json
+{
+  "mcpServers": {
+    "CLI for Microsoft 365 MCP Server": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@pnp/cli-microsoft365-mcp-server@latest"
+      ]
+    }
+  }
+}
+```
+
+4. Save and enable the 'CLI for Microsoft 365 MCP Server' in the `Tools & MCP` tab and wait for the tools to load.
+
 ## 🧠 LLM Suggestion 
 
 For best results, use it with Claude Sonnet 4 or Claude Sonnet 3.7.
