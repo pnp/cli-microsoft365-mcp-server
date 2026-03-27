@@ -176,10 +176,6 @@ When using [Cursor](https://www.cursor.so/) you can add the MCP server by doing 
 
 4. Save and enable the 'CLI for Microsoft 365 MCP Server' in the `Tools & MCP` tab and wait for the tools to load.
 
-## 🧠 LLM Suggestion 
-
-For best results, use it with Claude Sonnet 4 or Claude Sonnet 3.7.
-
 ## 📷 Use Cases
 
 The below uses cases are only a few example how you may use this MCP server. It is capable of handling many different tasks, so feel free to experiment with it and basically manage all of Microsoft 365 using natural language.
@@ -231,6 +227,15 @@ prompt:
 | m365GetCommandDocs | Gets documentation for a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to provide detailed information about the command along with examples, use cases, and option descriptions |
 | m365RunCommand | Runs a specified CLI for Microsoft 365 command to be used by the Model Context Protocol to execute the command and return the result and reason over the response |
 | m365GetBestPractices | Gets best practices for using CLI for Microsoft 365 in scripts, including guidance on authentication checking, error handling, output handling, and configuration |
+
+## 🎓 Skills
+
+This repo includes custom GitHub Copilot skills that teach the AI how to use CLI for Microsoft 365 effectively. Skills are automatically loaded by GitHub Copilot when relevant tasks are detected.
+
+| Skill | Description |
+|-------|-------------|
+| `cli-microsoft365` | Guides Copilot on running `m365` commands directly in the terminal. Covers command syntax, authentication methods, output formatting, JMESPath filtering, and common patterns for managing SharePoint Online, Entra ID, Teams, Power Platform, and more. Use when asking Copilot to run CLI for Microsoft 365 commands interactively. |
+| `cli-microsoft365-script` | Guides Copilot on writing PowerShell scripts that automate Microsoft 365 management using `m365` commands. Covers script setup, structured error handling with the `Invoke-CLICommand` helper, CI/CD authentication, batch operations, CSV processing, and security best practices. Use when asking Copilot to create automation scripts. |
 
 ## 🏗️ How to build and run it locally
 
