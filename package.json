@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.27.1",
-    "fuse.js": "7.1.0"
+    "fuse.js": "7.3.0"
   },
   "devDependencies": {
     "@types/node": "25.5.0",
