@@ -6,12 +6,12 @@
     "url": "https://github.com/pnp/cli-microsoft365-mcp-server",
     "source": "github"
   },
-  "version": "0.1.20",
+  "version": "0.1.21",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@pnp/cli-microsoft365-mcp-server",
-      "version": "0.1.20",
+      "version": "0.1.21",
       "transport": {
         "type": "stdio"
       }

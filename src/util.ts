@@ -15,6 +15,16 @@ interface CommandError {
 
 
 export async function runCliCommand(command: string): Promise<string> {
+    const trimmedCommand = command.trim();
+    if (!/^m365(\s|$)/.test(trimmedCommand)) {
+        throw new Error('Only m365 commands are allowed. Command must start with "m365".');
+    }
+    
+    if (/[;&|`$<>\n\r]|\$\(|\|\|/.test(trimmedCommand)) {
+        throw new Error('Command contains disallowed shell metacharacters.');
+    }
+
+    command = trimmedCommand;
     let isJsonOutput = false;
     // Check if --output flag is already present (using precise pattern to avoid matching --output-file etc.)
     if (!/--output(?:\s|=|$)/.test(command)) {
@@ -28,7 +38,7 @@ export async function runCliCommand(command: string): Promise<string> {
     } else if (/--output[=\s]+json\b/.test(command)) {
         isJsonOutput = true;
     }
-    
+
     return new Promise((resolve, reject) => {
         const subprocess = spawn(command, {
             shell: true,
