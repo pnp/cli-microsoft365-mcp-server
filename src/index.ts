@@ -54,7 +54,7 @@ server.registerTool(
         inputSchema:
         {
             commandName: z.string().describe('command name which for which documentation is requested'),
-            docs: z.string().describe('file path to command documentation')
+            docs: z.string().describe('relative path to command documentation within the CLI command docs directory')
         }
     },
     async ({ commandName, docs }) => ({

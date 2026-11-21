@@ -82,9 +82,14 @@ export async function runCliCommand(command: string): Promise<string> {
 
 export async function getCommandDocs(commandName: string, docs: string): Promise<any> {
     try {
-        const filePath = await checkGlobalPackage('@pnp/cli-microsoft365', `docs${path.sep}docs${path.sep}cmd${path.sep}${docs}`);
-        if (!filePath) {
+        const docsDirectory = await checkGlobalPackage('@pnp/cli-microsoft365', path.join('docs', 'docs', 'cmd'));
+        if (!docsDirectory) {
             throw new Error('@pnp/cli-microsoft365 npm package not found or command documentation file not found');
+        }
+
+        const filePath = path.resolve(docsDirectory, docs);
+        if (path.isAbsolute(docs) || !isPathWithinDirectory(docsDirectory, filePath)) {
+            throw new Error('Documentation path must be within the command documentation directory');
         }
 
         const fileExists = await CheckIfFileExists(filePath);
@@ -92,12 +97,24 @@ export async function getCommandDocs(commandName: string, docs: string): Promise
             throw new Error(`Documentation file for command ${commandName} not found at ${filePath}`);
         }
 
-        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const realDocsDirectory = await fs.realpath(docsDirectory);
+        const realFilePath = await fs.realpath(filePath);
+        if (!isPathWithinDirectory(realDocsDirectory, realFilePath)) {
+            throw new Error('Documentation path must be within the command documentation directory');
+        }
+
+        const fileContent = await fs.readFile(realFilePath, 'utf-8');
         return fileContent;
     } catch (error) {
         console.error('An error occurred:', error);
         return `Failed to retrieve documentation for command ${commandName}: ${error}`;
     }
+}
+
+function isPathWithinDirectory(directory: string, filePath: string): boolean {
+    const relativePath = path.relative(directory, filePath);
+    return relativePath !== '' && relativePath !== '..' &&
+        !relativePath.startsWith(`..${path.sep}`) && !path.isAbsolute(relativePath);
 }
 
 export async function searchCommands(query: string, limit: number = 10): Promise<Command[] | CommandError[]> {

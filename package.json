@@ -34,6 +34,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "test": "npm run build && node --test test/util.test.js",
     "start": "node dist/index.js",
     "inspect": "npx -y @modelcontextprotocol/inspector node dist/index.js"
   },
